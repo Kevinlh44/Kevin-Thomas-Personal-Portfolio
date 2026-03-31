@@ -3,263 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kevin Thomas Kurian | Cybersecurity Professional</title>
-    
-    <!-- Google Fonts: Futuristic and Minimal (Space Grotesk + Plus Jakarta Sans) -->
+    <title>Kevin Thomas Kurian | Cybersecurity & Digital Forensics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Icons (Phosphor Icons) -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <meta http-equiv="refresh" content="0; url=code.html">
 </head>
 <body>
-    <div class="grain-overlay"></div> <!-- Futuristic grain texture effect -->
-    
-    <!-- Navigation -->
+    <div class="page-reveal"></div>
+    <div class="noise-overlay"></div>
+    <div class="scanlines-overlay"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
     <nav class="navbar">
         <div class="container nav-content">
-            <a href="#" class="logo">
-                <!-- Futuristic K Logo -->
-                <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
-                    <line x1="20" y1="10" x2="20" y2="90" stroke="var(--cyprus)" stroke-width="8" />
-                    <line x1="80" y1="10" x2="20" y2="50" stroke="var(--cyprus)" stroke-width="8" />
-                    <line x1="20" y1="50" x2="80" y2="90" stroke="var(--cyprus)" stroke-width="8" />
-                    <circle cx="80" cy="90" r="5" fill="var(--cyprus)"/>
-                </svg>
-                <span>Kevin<span class="logo-accent">Thomas Kurian</span></span>
+            <a href="#home" class="logo mono">
+                <span class="logo-bracket">[</span>KTK<span class="logo-bracket">]</span>
             </a>
-            
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
-                <i class="ph ph-list"></i>
+            <button class="mobile-menu-btn" aria-label="Open menu">
+                <span></span><span></span><span></span>
             </button>
-            
-            <ul class="nav-links">
+            <ul class="nav-links mono">
+                <li><a href="#about">About</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#certs">Certs</a></li>
                 <li><a href="#skills">Skills</a></li>
-                <li><a href="#academics">Academics</a></li>
-                <li><a href="#contact" class="nav-contact">Contact</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a class="resume-btn" href="#" download>Resume</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="container">
-        <!-- Hero Section -->
-        <section class="hero flex-col" id="home">
-            <div class="hero-content reveal-stagger">
-                <p class="hero-tech-mono">[ SYSTEM // STATUS: ONLINE ]</p>
-                <h1 class="hero-name">Kevin Thomas Kurian</h1>
-                <p class="hero-title">Cybersecurity & Digital Forensics Specialist</p>
-                <div class="hero-desc">
-                    Skilled in threat detection, incident investigation, and proactive risk mitigation.
-                    Applying technical expertise in real-world cybercrime investigations.
+    <main>
+        <section class="hero section" id="home">
+            <canvas id="hero-canvas"></canvas>
+            <div class="container hero-content">
+                <div class="hero-eyebrow-wrap reveal">
+                    <span class="line"></span>
+                    <p id="typed-eyebrow" class="hero-eyebrow mono"></p>
+                    <span class="line"></span>
                 </div>
-                <div class="hero-links">
-                    <a href="#experience" class="line-link">Explore Work <i class="ph ph-arrow-down-right"></i></a>
+                <h1 class="hero-name glitch reveal" data-text="Kevin Thomas Kurian">
+                    <span>Kevin</span>
+                    <span>Thomas</span>
+                    <span class="surname">Kurian</span>
+                </h1>
+                <p class="hero-subtitle mono reveal">THREAT DETECTION · INCIDENT INVESTIGATION · DIGITAL FORENSICS</p>
+                <div class="hero-ctas reveal">
+                    <a class="btn btn-solid magnetic" href="#projects">View Work <span>&rarr;</span></a>
+                    <a class="btn btn-ghost magnetic" href="#" download>&darr; Resume</a>
+                </div>
+                <div class="stats reveal">
+                    <div><strong class="count" data-target="3">0</strong><span>Internships</span></div>
+                    <div><strong class="count" data-target="4">0</strong><span>Certifications</span></div>
+                    <div><strong class="count" data-target="3">0</strong><span>Projects</span></div>
                 </div>
             </div>
-            <!-- Cybersecurity Radar Scanner -->
-            <div class="hero-geometry">
-                <svg width="200" height="200" viewBox="0 0 100 100" class="radar-scan">
-                    <!-- Concentric Rings -->
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="var(--cyprus)" stroke-width="0.5" opacity="0.3"/>
-                    <circle cx="50" cy="50" r="30" fill="none" stroke="var(--cyprus)" stroke-width="0.5" opacity="0.4"/>
-                    <circle cx="50" cy="50" r="15" fill="none" stroke="var(--cyprus)" stroke-width="0.5" opacity="0.5"/>
-                    <!-- Crosshairs -->
-                    <line x1="5" y1="50" x2="95" y2="50" stroke="var(--cyprus)" stroke-width="0.5" opacity="0.2"/>
-                    <line x1="50" y1="5" x2="50" y2="95" stroke="var(--cyprus)" stroke-width="0.5" opacity="0.2"/>
-                    <!-- Sweeping Radar Line -->
-                    <line x1="50" y1="50" x2="50" y2="5" stroke="var(--cyprus)" stroke-width="1.5" stroke-linecap="round" class="radar-line"/>
-                    <!-- Threat blips -->
-                    <circle cx="70" cy="30" r="2" fill="var(--cyprus-dim)" class="blip"/>
-                    <circle cx="35" cy="70" r="1.5" fill="var(--cyprus)" class="blip blip-2"/>
-                </svg>
+            <div class="scroll-indicator mono">
+                <span class="scroll-line"></span>
+                <span>SCROLL</span>
             </div>
         </section>
 
-        <!-- Experience Section -->
-        <section class="experience section-divider" id="experience">
-            <h2 class="section-heading reveal">Experience.</h2>
-            <div class="timeline">
-                <div class="timeline-row reveal-stagger">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Nov 2023 - Apr 2024</span>
-                        <span class="timeline-company">Alibi Global</span>
-                    </div>
-                    <div class="timeline-body">
-                        <h3>Digital Forensics Intern</h3>
-                        <p>Conducted digital evidence collection and forensic analysis ensuring compliance with chain-of-custody. Utilized Magnet Axiom, FTK Imager, and Autopsy to prepare detailed forensic reports for legal proceedings.</p>
-                    </div>
-                </div>
+        <section class="about section" id="about">
+            <div class="container">
+                <p class="section-label mono reveal">// 01 - ABOUT</p>
+                <h2 class="section-title reveal">Cybersecurity Profile</h2>
+                <p class="reveal">Cybersecurity and Digital Forensics specialist focused on proactive threat analysis, evidence-led investigation workflows, and secure systems hardening.</p>
+            </div>
+        </section>
 
-                <div class="timeline-row reveal-stagger">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">Jul 2023</span>
-                        <span class="timeline-company">Police Station</span>
-                    </div>
-                    <div class="timeline-body">
-                        <h3>Cybercrime Investigation Intern</h3>
-                        <p>Assisted law enforcement in real-world investigations involving fraud and digital harassment. Performed digital forensics on seized devices and conducted malware analysis.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-row reveal-stagger">
-                    <div class="timeline-meta">
-                        <span class="timeline-date">May 2025</span>
-                        <span class="timeline-company">Prodigy Infotech</span>
-                    </div>
-                    <div class="timeline-body">
-                        <h3>Cybersecurity Intern</h3>
-                        <p>Conducted vulnerability assessments and penetration testing on web applications and network infrastructure. Performed threat analysis to identify risks and suggest mitigations.</p>
-                    </div>
+        <section class="experience section bg-2" id="experience">
+            <div class="container">
+                <p class="section-label mono reveal">// 02 - EXPERIENCE</p>
+                <h2 class="section-title reveal">Work <span>History</span></h2>
+                <div class="timeline">
+                    <article class="timeline-item reveal">
+                        <div class="timeline-marker"><span></span></div>
+                        <div class="timeline-card">
+                            <header><h3>Digital Forensics Intern <em>Alibi Global</em></h3><time class="mono">Nov 2023 - Apr 2024</time></header>
+                            <p>Conducted digital evidence collection and forensic analysis with strict chain-of-custody adherence for investigation-ready reporting.</p>
+                            <div class="tags mono"><span>Magnet Axiom</span><span>FTK Imager</span><span>Autopsy</span><span>Chain-of-Custody</span></div>
+                        </div>
+                    </article>
+                    <article class="timeline-item reveal">
+                        <div class="timeline-marker"><span></span></div>
+                        <div class="timeline-card">
+                            <header><h3>Cybercrime Investigation Intern <em>Kerala Police Department</em></h3><time class="mono">Jul 2023</time></header>
+                            <p>Supported cybercrime cases involving fraud and harassment through malware triage and forensic analysis of seized devices.</p>
+                            <div class="tags mono"><span>Malware Analysis</span><span>Device Forensics</span><span>Fraud Investigation</span></div>
+                        </div>
+                    </article>
+                    <article class="timeline-item reveal">
+                        <div class="timeline-marker"><span></span></div>
+                        <div class="timeline-card">
+                            <header><h3>Cybersecurity Intern <em>Prodigy Infotech</em></h3><time class="mono">May 2025</time></header>
+                            <p>Performed vulnerability assessments and penetration testing across web application and network security surfaces.</p>
+                            <div class="tags mono"><span>Penetration Testing</span><span>Vulnerability Assessment</span><span>Web App Security</span></div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- Projects Section (Non-Card layout) -->
-        <section class="projects section-divider" id="projects">
-            <h2 class="section-heading reveal">Selected Projects.</h2>
-            <div class="project-list">
-                <!-- Project Item -->
-                <div class="project-item reveal-stagger">
-                    <div class="project-header">
+        <section class="projects section" id="projects">
+            <div class="container">
+                <p class="section-label mono reveal">// 03 - PROJECTS</p>
+                <h2 class="section-title reveal">Selected <span>Work</span></h2>
+                <div class="projects-grid">
+                    <article class="project-card tilt reveal">
+                        <span class="project-num mono">01</span>
+                        <div class="project-icon"></div>
+                        <div class="tags mono"><span>ML</span><span>Python</span></div>
                         <h3>Phishing Website Detection</h3>
-                        <span class="project-org">Machine Learning • Python</span>
-                    </div>
-                    <div class="project-details">
-                        <p>Developed a machine learning model to identify malicious URLs with 92% accuracy using supervised learning algorithms. Implemented feature extraction analyzing URL structure, domain age, and SSL certificates.</p>
-                    </div>
-                </div>
-                
-                <!-- Project Item -->
-                <div class="project-item reveal-stagger">
-                    <div class="project-header">
-                        <h3>Image Encryption using RSA</h3>
-                        <span class="project-org">Cryptography • RSA</span>
-                    </div>
-                    <div class="project-details">
-                        <p>Designed and implemented a secure image transmission system using the RSA cryptographic algorithm. Applied public-key cryptography to protect image data integrity and detect unauthorized access.</p>
-                    </div>
-                </div>
-
-                <!-- Project Item -->
-                <div class="project-item reveal-stagger">
-                    <div class="project-header">
-                        <h3>Analysis of Digital Exhibits</h3>
-                        <span class="project-org">Malware Analysis • Digital Evidence</span>
-                    </div>
-                    <div class="project-details">
-                        <p>Examined digital evidence using static analysis (data extraction without execution) and dynamic analysis (behavioral observation in controlled environments) to extract relevant cyber evidence.</p>
-                    </div>
+                        <p>Built a model that identifies malicious URLs using supervised learning and structured feature extraction.</p>
+                        <div class="metric"><strong>92%</strong><span class="mono">DETECTION ACCURACY</span></div>
+                    </article>
+                    <article class="project-card tilt reveal">
+                        <span class="project-num mono">02</span>
+                        <div class="project-icon"></div>
+                        <div class="tags mono"><span>Cryptography</span><span>RSA</span></div>
+                        <h3>Image Encryption via RSA</h3>
+                        <p>Implemented secure image transfer with public-key cryptography and integrity-first handling.</p>
+                        <div class="metric"><strong>2048</strong><span class="mono">BIT ENCRYPTION KEY</span></div>
+                    </article>
+                    <article class="project-card tilt reveal">
+                        <span class="project-num mono">03</span>
+                        <div class="project-icon"></div>
+                        <div class="tags mono"><span>Forensics</span><span>Malware</span></div>
+                        <h3>Digital Exhibits Analysis</h3>
+                        <p>Analyzed artifacts through static and dynamic methods to extract high-value forensic evidence.</p>
+                        <div class="metric"><strong>S + D</strong><span class="mono">ANALYSIS METHODS</span></div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- Certifications Section (One line list) -->
-        <section class="certifications section-divider" id="certifications">
-            <h2 class="section-heading reveal">Certifications.</h2>
-            <ul class="minimal-list">
-                <li class="reveal-stagger">
-                    <span class="list-title">Certified Network Security Practitioner</span>
-                    <span class="list-meta">SecOps Group (May 2025)</span>
-                </li>
-                <li class="reveal-stagger">
-                    <span class="list-title">Cybersecurity Fundamentals & AI</span>
-                    <span class="list-meta">IBM SkillsBuild (May 2025)</span>
-                </li>
-                <li class="reveal-stagger">
-                    <span class="list-title">Cybersecurity Job Simulations</span>
-                    <span class="list-meta">MasterCard, AIG, Tata, ANZ (Forage - June 2025)</span>
-                </li>
-                <li class="reveal-stagger">
-                    <span class="list-title">Junior Cybersecurity Analyst & Ethical Hacker</span>
-                    <span class="list-meta">Cisco Networking Academy (Feb 2026)</span>
-                </li>
-            </ul>
-        </section>
-
-        <!-- Skills Section -->
-        <section class="skills section-divider" id="skills">
-            <h2 class="section-heading reveal">Technical Arsenal.</h2>
-            <div class="skills-grid">
-                <div class="skill-group reveal-stagger">
-                    <h4 class="skill-title">Digital Forensics</h4>
-                    <p class="skill-desc">Magnet Axiom, FTK Imager, EnCase, Autopsy, Oxygen Forensics, XRY, Cellebrite UFED</p>
-                </div>
-                <div class="skill-group reveal-stagger">
-                    <h4 class="skill-title">Security Testing</h4>
-                    <p class="skill-desc">Burp Suite, OWASP ZAP, Metasploit, SIEM, Nmap, Wireshark, Scapy</p>
-                </div>
-                <div class="skill-group reveal-stagger">
-                    <h4 class="skill-title">Competencies</h4>
-                    <p class="skill-desc">Incident Response, Malware Analysis, Vulnerability Assessment, Network Security</p>
-                </div>
-                <div class="skill-group reveal-stagger">
-                    <h4 class="skill-title">Programming</h4>
-                    <p class="skill-desc">Python, AI/Machine Learning, Data Analysis</p>
+        <section class="certs section" id="certs">
+            <div class="container">
+                <p class="section-label mono reveal">// 04 - CERTIFICATIONS</p>
+                <h2 class="section-title reveal">Validated Expertise</h2>
+                <div class="cert-list">
+                    <article class="cert-row reveal"><div><h3>Certified Network Security Practitioner</h3><p>SecOps Group</p></div><time class="mono">May 2025</time></article>
+                    <article class="cert-row reveal"><div><h3>Cybersecurity Fundamentals &amp; AI</h3><p>IBM SkillsBuild</p></div><time class="mono">May 2025</time></article>
+                    <article class="cert-row reveal"><div><h3>Cybersecurity Job Simulations</h3><p>MasterCard, AIG, Tata, ANZ via Forage</p></div><time class="mono">Jun 2025</time></article>
+                    <article class="cert-row reveal"><div><h3>Junior Cybersecurity Analyst &amp; Ethical Hacker</h3><p>Cisco Networking Academy</p></div><time class="mono">Feb 2026</time></article>
                 </div>
             </div>
         </section>
 
-        <!-- Academics Section (No marks) -->
-        <section class="academics section-divider" id="academics">
-            <h2 class="section-heading reveal">Academics.</h2>
-            <div class="academic-list">
-                <div class="academic-item reveal-stagger">
-                    <div class="academic-year">2024–Present</div>
-                    <div class="academic-info">
-                        <h3>M.Sc. Cyber Forensics & Cyber Security</h3>
-                        <p>Amity University Noida, Uttar Pradesh</p>
-                    </div>
-                </div>
-                <div class="academic-item reveal-stagger">
-                    <div class="academic-year">2020–2023</div>
-                    <div class="academic-info">
-                        <h3>B.Sc. Cyber Forensics</h3>
-                        <p>Mahatma Gandhi University, Kerala</p>
-                    </div>
-                </div>
-                <div class="academic-item reveal-stagger">
-                    <div class="academic-year">2016</div>
-                    <div class="academic-info">
-                        <h3>Higher Secondary (12th)</h3>
-                        <p>St. Thomas Higher Secondary School, Trivandrum</p>
-                    </div>
-                </div>
-                <div class="academic-item reveal-stagger">
-                    <div class="academic-year">2014</div>
-                    <div class="academic-info">
-                        <h3>Senior Secondary (10th)</h3>
-                        <p>Navajeevan Bethany Vidyalaya</p>
-                    </div>
+        <section class="skills section bg-2" id="skills">
+            <div class="container">
+                <p class="section-label mono reveal">// 05 - SKILLS</p>
+                <h2 class="section-title reveal">Core Competencies</h2>
+                <div class="skills-grid">
+                    <article class="skill-card tilt reveal"><h3>Digital Forensics</h3><div class="tags mono"><span>Magnet Axiom</span><span>FTK Imager</span><span>EnCase</span><span>Autopsy</span><span>Oxygen Forensics</span><span>XRY</span><span>Cellebrite UFED</span></div></article>
+                    <article class="skill-card tilt reveal"><h3>Security Testing</h3><div class="tags mono"><span>Burp Suite</span><span>OWASP ZAP</span><span>Metasploit</span><span>SIEM</span><span>Nmap</span><span>Wireshark</span><span>Scapy</span></div></article>
+                    <article class="skill-card tilt reveal"><h3>Competencies</h3><div class="tags mono"><span>Incident Response</span><span>Malware Analysis</span><span>Vulnerability Assessment</span><span>Network Security</span></div></article>
+                    <article class="skill-card tilt reveal"><h3>Programming</h3><div class="tags mono"><span>Python</span><span>Machine Learning</span><span>AI Integration</span><span>Data Analysis</span></div></article>
                 </div>
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section class="contact section-divider" id="contact">
-            <div class="contact-compact reveal">
-                <h2 class="section-heading">Connect.</h2>
-                <div class="contact-links">
-                    <a href="mailto:kevinlh9@gmail.com">kevinlh9@gmail.com</a>
-                    <a href="https://www.linkedin.com/in/kevin-thomas-kurian-91aa9314a" target="_blank">LinkedIn</a>
-                    <a href="https://www.instagram.com/kevin_thomas_kurian?igsh=bW93YXl0Zjc3amx0&utm_source=qr" target="_blank">Instagram</a>
-                    <span class="phone-link">+91-7356513410</span>
+        <section class="education section" id="education">
+            <div class="container">
+                <p class="section-label mono reveal">// 06 - EDUCATION</p>
+                <h2 class="section-title reveal">Academic Path</h2>
+                <div class="education-grid">
+                    <article class="edu-card active reveal"><span class="mono year">2024-Present</span><h3>M.Sc. Cyber Forensics &amp; Cyber Security</h3><p>Amity University, Noida</p><span class="badge mono">Postgraduate</span></article>
+                    <article class="edu-card reveal"><span class="mono year">2020-2023</span><h3>B.Sc. Cyber Forensics</h3><p>Mahatma Gandhi University, Kerala</p><span class="badge mono">Undergraduate</span></article>
+                    <article class="edu-card reveal"><span class="mono year">2016</span><h3>Higher Secondary (12th)</h3><p>St. Thomas Higher Secondary School, Trivandrum</p><span class="badge mono">Secondary</span></article>
+                    <article class="edu-card reveal"><span class="mono year">2014</span><h3>Senior Secondary (10th)</h3><p>Navajeevan Bethany Vidyalaya</p><span class="badge mono">Secondary</span></article>
                 </div>
             </div>
         </section>
-        
-        <!-- Minimal Footer -->
-        <footer class="minimal-footer reveal">
-            <p>&copy; <span id="year"></span> Kevin Thomas Kurian. Cybersecurity Professional.</p>
-        </footer>
+
+        <section class="contact section bg-2" id="contact">
+            <canvas id="contact-canvas"></canvas>
+            <div class="container contact-content">
+                <p class="section-label mono reveal">// 07 - CONTACT</p>
+                <h2 class="section-title reveal">Let's <span>Connect</span></h2>
+                <p class="reveal">Open to opportunities, collaborations, and cybersecurity discussions.</p>
+                <div class="contact-grid">
+                    <a class="contact-card reveal" href="mailto:kevinlh9@gmail.com"><span class="mono">EMAIL</span><strong>kevinlh9@gmail.com</strong><em>&rarr;</em></a>
+                    <a class="contact-card reveal" href="https://www.linkedin.com/in/kevin-thomas-kurian-91aa9314a" target="_blank" rel="noreferrer"><span class="mono">LINKEDIN</span><strong>Kevin Thomas Kurian</strong><em>&rarr;</em></a>
+                    <a class="contact-card reveal" href="https://github.com/Kevinlh44" target="_blank" rel="noreferrer"><span class="mono">GITHUB</span><strong>github.com/Kevinlh44</strong><em>&rarr;</em></a>
+                    <a class="contact-card reveal" href="https://www.instagram.com/kevin_thomas_kurian" target="_blank" rel="noreferrer"><span class="mono">INSTAGRAM</span><strong>@kevin_thomas_kurian</strong><em>&rarr;</em></a>
+                </div>
+                <p class="phone mono">+91-7356513410</p>
+            </div>
+        </section>
     </main>
 
-    <script src="script.js"></script>
+    <footer class="footer">
+        <div class="container footer-inner">
+            <p>&copy; <span id="year"></span> Kevin Thomas Kurian</p>
+            <p><span class="pulse-dot"></span> Available for Opportunities</p>
+        </div>
+    </footer>
+
 </body>
 </html>

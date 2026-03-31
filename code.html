@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kevin Thomas Kurian | Forensic Architect</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Syne:wght@700;800&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "tertiary-fixed": "#FFB800",
+                "primary": "#FFB800",
+                "on-primary-fixed-variant": "#2c1a00",
+                "secondary": "#FFB800",
+                "secondary-fixed-dim": "#FFB800",
+                "primary-fixed-dim": "#FFB800",
+                "on-surface-variant": "#a6acb1",
+                "background": "#090f13",
+                "tertiary-container": "#FFB800",
+                "on-error": "#490006",
+                "on-tertiary-container": "#2c1a00",
+                "surface-bright": "#242d34",
+                "error-dim": "#d7383b",
+                "tertiary-fixed-dim": "#FFB800",
+                "surface-container": "#131a20",
+                "on-tertiary": "#2c1a00",
+                "tertiary-dim": "#FFB800",
+                "error-container": "#9f0519",
+                "on-primary": "#ffffff",
+                "surface-container-lowest": "#000000",
+                "inverse-primary": "#6c001a",
+                "surface-dim": "#090f13",
+                "inverse-on-surface": "#50565b",
+                "on-secondary-fixed-variant": "#68001a",
+                "surface-container-highest": "#1e272d",
+                "surface-variant": "#1e272d",
+                "secondary-fixed": "#FFB800",
+                "on-secondary-fixed": "#480011",
+                "error": "#ff716c",
+                "surface-container-low": "#0e1419",
+                "outline": "#70767b",
+                "tertiary": "#FFB800",
+                "on-tertiary-fixed": "#2c1a00",
+                "primary-fixed": "#FFB800",
+                "on-secondary-container": "#ffddeb",
+                "outline-variant": "#43494e",
+                "on-error-container": "#ffa8a3",
+                "secondary-dim": "#FFB800",
+                "on-secondary": "#5d0016",
+                "on-background": "#e3e9ef",
+                "secondary-container": "#6b001a",
+                "inverse-surface": "#f5faff",
+                "on-primary-container": "#5b0015",
+                "on-tertiary-fixed-variant": "#2c1a00",
+                "surface-tint": "#FFB800",
+                "surface": "#090f13",
+                "primary-dim": "#FFB800",
+                "surface-container-high": "#192126",
+                "on-primary-fixed": "#45000f",
+                "primary-container": "#FFB800",
+                "on-surface": "#e3e9ef"
+              },
+              fontFamily: {
+                "headline": ["Syne", "sans-serif"],
+                "body": ["Inter", "sans-serif"],
+                "label": ["JetBrains Mono", "monospace"],
+                "mono": ["JetBrains Mono", "monospace"]
+              },
+              borderRadius: {"DEFAULT": "12px", "lg": "16px", "xl": "22px", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #090f13;
+            color: #e3e9ef;
+            overflow-x: hidden;
+            cursor: crosshair
+        }
+        .scanline-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: none;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 100
+        }
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 101;
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDEYsNzRkzzy6EWfivcRiZT8rSADoKSNxLWtr4ViQrjcwvrRyn9_dopJeCbcT1PdO6RFUlyrM_ToMTbh_pyKUizOmzF1-fIgD2D16yrzQQ9_gZ-94_cdBFCgjmI9hYzXvgcQmQw4BMpdO1q5pdP9KwbcDV9CqHYFV3ltxrDVgHuPKYV-aaiAp1gCMqrD6J18hF9QK1mP6j6s4mUEJofhRgTsHDFVXZpezh08l9YMpIaPDlpxYsUlm70ormxTCsFx3DbIQowc06bb7o)
+        }
+        .hero-network {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.22;
+        }
+        .hero-title-glitch {
+            animation: glitchPulse 2.4s infinite;
+        }
+        @keyframes glitchPulse {
+            0%, 72%, 100% { text-shadow: none; transform: translate(0); }
+            74% { text-shadow: 2px 0 #FF6A00, -2px 0 #FFB800; transform: translate(-1px, 0); }
+            76% { text-shadow: -2px 0 #FF6A00, 2px 0 #FFD166; transform: translate(1px, 0); }
+            78% { text-shadow: 2px 1px #FFB800, -2px -1px #FF6A00; transform: translate(0, 0); }
+            80% { text-shadow: -1px -1px #FFD166, 1px 1px #FF6A00; transform: translate(0, 0); }
+        }
+        .sig-k {
+            font-family: "Great Vibes", cursive;
+            font-size: 2rem;
+            line-height: 1;
+            display: inline-block;
+            transform: translateY(2px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+        }
+        .glass-card {
+            background: rgba(30, 39, 45, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 184, 0, 0.1);
+            transition: all 0.3s ease
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 184, 0, 0.4);
+            background: rgba(30, 39, 45, 0.6);
+            box-shadow: 0 0 30px rgba(255, 184, 0, 0.05)
+        }
+        .glitch-text:hover {
+            animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite
+        }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        .contact-icon {
+            font-size: 2rem;
+            color: #FFB800;
+            transition: transform 0.25s ease;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.62);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 220ms ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-panel {
+            width: min(980px, 100%);
+            max-height: min(82vh, 920px);
+            overflow: auto;
+            background: rgba(30, 39, 45, 0.72);
+            border: 1px solid rgba(255, 184, 0, 0.18);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 0 80px rgba(255, 184, 0, 0.06);
+            transform: translateY(14px) scale(0.98);
+            transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.active .modal-panel {
+            transform: translateY(0) scale(1);
+        }
+        .project-card,
+        .cert-card,
+        .skill-card {
+            transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+            will-change: transform;
+        }
+        .project-card:hover,
+        .cert-card:hover,
+        .skill-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 0 40px rgba(255, 184, 0, 0.12);
+            border-color: rgba(255, 184, 0, 0.35);
+        }
+        #projects-box,
+        #certs-box,
+        #skills-box {
+            transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+        }
+        #projects-box:hover,
+        #certs-box:hover,
+        #skills-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(255, 184, 0, 0.12);
+        }
+        .modal-panel {
+            font-family: "Inter", sans-serif;
+        }
+        .modal-panel ul li {
+            font-family: "Inter", sans-serif;
+        }
+        .modal-close {
+            border: 1px solid rgba(255, 184, 0, 0.28);
+            padding: 8px 12px;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #e3e9ef;
+            background: transparent;
+        }
+        .modal-close:hover { background: rgba(255, 255, 255, 0.05); }
+
+        .panel-expand {
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+            overflow: hidden;
+            transition: max-height 320ms ease, opacity 220ms ease;
+        }
+        .panel-expand.open {
+            max-height: 980px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* Rounded-square aesthetic across interactive boxes */
+        .glass-card,
+        .project-card,
+        .cert-card,
+        .skill-card,
+        .modal-panel,
+        .modal-close,
+        #projects-more,
+        #certs-more,
+        #skills-more,
+        #news-grid > a {
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary selection:text-on-primary">
+<div class="scanline-overlay"></div>
+<div class="grain"></div>
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 rounded-none bg-[#090f13]/40 backdrop-blur-xl flex justify-between items-center px-8 h-20 w-full max-w-none shadow-[0_0_20px_rgba(255,184,0,0.05)]">
+<a id="ktk-logo" href="#" class="font-mono font-bold tracking-tighter text-xl flex items-center gap-1" aria-label="Refresh home">
+<span class="text-primary sig-k">K</span>
+    </a>
+<div class="hidden md:flex gap-8 font-['JetBrains_Mono'] text-[0.85rem] uppercase tracking-widest text-[#e3e9ef]">
+<a class="text-primary border-b-2 border-primary pb-1 transition-all duration-300" href="#home">About</a>
+<a class="text-[#e3e9ef]/70 hover:text-primary transition-all duration-300" href="#experience">Experience</a>
+<a class="text-[#e3e9ef]/70 hover:text-primary transition-all duration-300" href="#projects">Projects</a>
+<a class="text-[#e3e9ef]/70 hover:text-primary transition-all duration-300" href="#certs">Certs</a>
+<a class="text-[#e3e9ef]/70 hover:text-primary transition-all duration-300" href="#skills">Skills</a>
+<a class="text-[#e3e9ef]/70 hover:text-primary transition-all duration-300" href="#news">News</a>
+<a class="text-[#e3e9ef]/70 hover:text-primary transition-all duration-300" href="#contact">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<a class="bg-primary text-white px-6 py-2 font-mono text-[0.85rem] font-bold tracking-widest uppercase hover:bg-secondary transition-all active:scale-95 cursor-crosshair resume-trigger flex items-center gap-2"
+   href="https://drive.google.com/file/d/1ZB-TprZf9sUw_TzIp0Ro87ZNQOOZZ0M7/view?usp=drive_link">
+            RESUME
+            <span class="material-symbols-outlined text-white">download</span>
+        </a>
+</div>
+<div class="bg-gradient-to-b from-primary/10 to-transparent h-[2px] w-full absolute bottom-0 left-0"></div>
+</nav>
+<!-- Hero Section -->
+<header id="home" class="relative min-h-screen flex flex-col justify-center px-8 md:px-24 overflow-hidden pt-20">
+<canvas class="hero-network" id="heroNetwork"></canvas>
+<div class="relative z-10 max-w-6xl">
+<p class="font-mono text-on-surface-variant tracking-wider text-sm md:text-lg border-l-2 border-primary pl-6 mt-8 mb-6 uppercase">
+            // THREAT DETECTION · INCIDENT INVESTIGATION · DIGITAL FORENSICS <span class="animate-pulse">_</span>
+</p>
+<h1 class="hero-title-glitch font-headline text-6xl md:text-[7.5rem] leading-[0.85] font-extrabold tracking-tighter mb-8 uppercase">
+            Kevin<br/>
+            Thomas<br/>
+<span class="text-secondary-fixed-dim glitch-text">Kurian</span>
+</h1>
+<div class="flex flex-col md:flex-row md:items-center gap-6 mt-10 mb-12">
+<p class="font-mono text-primary text-sm tracking-[0.4em] uppercase mb-0">
+                CYBER SECURITY DIGITAL FORENSICS SPECIALIST
+            </p>
+</div>
+<div class="flex flex-wrap gap-6">
+<a class="border border-outline-variant text-on-surface px-10 py-4 font-mono font-bold tracking-widest uppercase hover:bg-surface-container-highest transition-all resume-trigger" href="https://drive.google.com/file/d/1ZB-TprZf9sUw_TzIp0Ro87ZNQOOZZ0M7/view?usp=drive_link">
+                ↓ RESUME
+            </a>
+</div>
+<div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-outline-variant/30 pt-8">
+<div>
+<span class="block text-4xl font-headline font-bold text-white mb-1">03</span>
+<span class="font-mono text-xs uppercase tracking-widest text-on-surface-variant">Internships Completed</span>
+</div>
+<div>
+<span class="block text-4xl font-headline font-bold text-white mb-1">04</span>
+<span class="font-mono text-xs uppercase tracking-widest text-on-surface-variant">Global Certifications</span>
+</div>
+<div>
+<span class="block text-4xl font-headline font-bold text-white mb-1">05</span>
+<span class="font-mono text-xs uppercase tracking-widest text-on-surface-variant">Strategic Projects</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Experience Section -->
+<section class="py-32 px-8 md:px-24 bg-surface-container-low relative" id="experience">
+<div class="max-w-7xl mx-auto">
+<div class="flex items-baseline gap-4 mb-20">
+<h2 class="font-headline text-5xl md:text-7xl font-extrabold uppercase leading-none">Experience</h2>
+<div class="h-[2px] flex-grow bg-outline-variant/30"></div>
+<span class="font-mono text-primary text-xs tracking-widest">[ LOG_HISTORY ]</span>
+</div>
+<div class="relative space-y-12">
+<!-- Timeline Line -->
+<div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-primary via-outline-variant to-transparent -translate-x-1/2 hidden md:block"></div>
+<!-- Exp 1 -->
+<div class="relative flex flex-col md:flex-row items-center gap-8 md:gap-0">
+<div class="md:w-1/2 md:pr-16 text-right hidden md:block">
+<span class="font-mono text-primary tracking-widest">NOV 2023 – APR 2024</span>
+</div>
+<div class="absolute left-4 md:left-1/2 w-3 h-3 bg-primary -translate-x-1/2 z-10 shadow-[0_0_10px_#FFB800]"></div>
+<div class="md:w-1/2 md:pl-16 w-full">
+<div class="glass-card p-8 group">
+<span class="font-mono text-[0.6rem] text-primary/60 mb-2 block tracking-widest uppercase">ID: 001_FORENSICS</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-1">Digital Forensics Intern</h3>
+<p class="text-secondary font-mono text-sm mb-4">Alibi Global</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-surface-container-highest text-[0.65rem] font-mono border border-outline-variant">Magnet Axiom</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[0.65rem] font-mono border border-outline-variant">FTK Imager</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[0.65rem] font-mono border border-outline-variant">Autopsy</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                            Executed deep-dive digital forensic examinations, acquiring and analyzing evidence from multiple data sources while maintaining strict chain-of-custody protocols.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Exp 2 -->
+<div class="relative flex flex-col md:flex-row items-center gap-8 md:gap-0">
+<div class="md:w-1/2 md:pr-16 w-full order-2 md:order-1">
+<div class="glass-card p-8 group md:text-right">
+<span class="font-mono text-[0.6rem] text-primary/60 mb-2 block tracking-widest uppercase">ID: 002_POLICE</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-1">Cybercrime Investigation Intern</h3>
+<p class="text-secondary font-mono text-sm mb-4">Kerala Police Department</p>
+<div class="flex flex-wrap gap-2 mb-4 md:justify-end">
+<span class="px-2 py-1 bg-surface-container-highest text-[0.65rem] font-mono border border-outline-variant">Malware Analysis</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[0.65rem] font-mono border border-outline-variant">Device Forensics</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                            Collaborated with specialized units on real-world cybercrime cases, assisting in malware identification and evidence recovery from seized digital hardware.
+                        </p>
+</div>
+</div>
+<div class="absolute left-4 md:left-1/2 w-3 h-3 bg-primary -translate-x-1/2 z-10 shadow-[0_0_10px_#FFB800]"></div>
+<div class="md:w-1/2 md:pl-16 hidden md:block order-1 md:order-2">
+<span class="font-mono text-primary tracking-widest">JUL 2023</span>
+</div>
+</div>
+<!-- Exp 3 -->
+<div class="relative flex flex-col md:flex-row items-center gap-8 md:gap-0">
+<div class="md:w-1/2 md:pr-16 text-right hidden md:block">
+<span class="font-mono text-primary tracking-widest">MAY 2025 (EXPECTED)</span>
+</div>
+<div class="absolute left-4 md:left-1/2 w-3 h-3 bg-primary -translate-x-1/2 z-10 shadow-[0_0_10px_#FFB800]"></div>
+<div class="md:w-1/2 md:pl-16 w-full">
+<div class="glass-card p-8 group">
+<span class="font-mono text-[0.6rem] text-primary/60 mb-2 block tracking-widest uppercase">ID: 003_SECURITY</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-1">Cybersecurity Intern</h3>
+<p class="text-secondary font-mono text-sm mb-4">Prodigy Infotech</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-surface-container-highest text-[0.65rem] font-mono border border-outline-variant">Penetration Testing</span>
+<span class="px-2 py-1 bg-surface-container-highest text-[0.65rem] font-mono border border-outline-variant">Vulnerability Assessment</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                            Conducting systematic vulnerability assessments and ethical hacking simulations to identify and remediate network security flaws.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Projects Grid -->
+<section class="py-32 px-8 md:px-24 bg-background" id="projects">
+<div class="max-w-7xl mx-auto">
+<div id="projects-box" role="button" tabindex="0" aria-controls="projects-more" aria-expanded="false" class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8 cursor-pointer select-none">
+<div>
+<span class="font-mono text-primary text-xs tracking-[0.5em] mb-4 block uppercase">Operations</span>
+<h2 class="font-headline text-5xl md:text-7xl font-extrabold uppercase leading-none">Tactical Projects</h2>
+</div>
+<div class="font-mono text-on-surface-variant text-sm border-l-2 border-outline-variant pl-6 max-w-md">
+                Deployment of specialized cryptographic and machine learning models for threat mitigation.
+            </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Project 1 -->
+<div class="project-card group relative bg-surface-container border border-outline-variant/30 overflow-hidden hover:border-primary/50 transition-colors cursor-pointer" role="button" tabindex="0"
+data-project-title="Phishing Website Detection Using Machine Learning"
+data-project-meta="Python, Scikit-learn, Feature Engineering — April 2023"
+data-project-metric="92% accuracy"
+data-project-bullets="Developed machine learning model to identify and classify malicious URLs with 92% accuracy using supervised learning.|Implemented feature extraction analyzing URL structure, domain age, SSL certificates, and page content characteristics.|Created real-time threat detection flow capable of processing and classifying URLs to prevent phishing attacks.">
+<div class="h-64 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="Abstract visualization of a network lattice with digital interference patterns and binary data streams in cyan and black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC52Tisw0prgS4B5-zywod91og_rtS9eZqAEUuvMp6pnOzvpgVts7OUf2wfcG_cMwz245VhEr0pVGy3D3jbOuL_1jlp0WIEXxcvlooPevBqIRiMIPPaIgbcKJRM9NCDuDStycW1o0fhG7hOpubJD_u8EbkBbGaFe8QzmdrzOsinwdZbUdG6OL4LNb1Zfl7k6vfBTeebJhhkZm29MRZ7aypG0ajaCr14KeZLOrIDg1T28oXQLoegrsWT_E89Il9wLgiskwjkk4L32So"/>
+</div>
+<div class="p-8">
+<span class="font-mono text-[0.6rem] text-primary mb-4 block tracking-[0.3em] uppercase">[ 0xML_SHIELD ]</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-4">Phishing Detection</h3>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">
+                        Machine learning model utilizing Python for real-time identification of deceptive URLs and malicious web architecture.
+                    </p>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">terminal</span>
+<span class="font-mono text-xs uppercase text-on-surface-variant">Python / Scikit-Learn</span>
+</div>
+</div>
+</div>
+<!-- Project 2 -->
+<div class="project-card group relative bg-surface-container border border-outline-variant/30 overflow-hidden hover:border-primary/50 transition-colors cursor-pointer" role="button" tabindex="0"
+data-project-title="Image Encryption and Detection Using RSA Algorithm"
+data-project-meta="Cryptography, RSA, Python — January 2023"
+data-project-metric="RSA secure transmission"
+data-project-bullets="Designed and implemented secure image transmission system using RSA cryptographic algorithm.|Applied public-key cryptography techniques to protect image data integrity and detect unauthorized access or tampering.|Developed detection mechanism to identify image modifications and ensure data authenticity.">
+<div class="h-64 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="Macro view of crystalline structures refracting light into sharp geometric patterns, dark futuristic aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJmD2c2Yt7VCkCqKmWlxw9ArKPaLPPMLmCi6_1CxL5UI53fJ5SiIaG47Dcqbi_6eYf1pq2dO16W1Gc7_ifg5TTIpUt8xq23oOizAST8uHTS2F9eRYtRHRK5PF3KGRJnwkPXqFouWyg5-uTxI5yM6IavpXX-C0IWf503O8PKcDaq_PcjBhUjEnSsIlvzMgiePmeeblZ1Vel-gcsoEPumxb-Q5eQisPRS91Id6flJOce5gPnzgpCYW-ajfHkU2fJBKR_KZSZabcfACs"/>
+</div>
+<div class="p-8">
+<span class="font-mono text-[0.6rem] text-primary mb-4 block tracking-[0.3em] uppercase">[ 0xCRYPT_IMAGE ]</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-4">RSA Encryption</h3>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">
+                        Implementation of the RSA algorithm to ensure high-security image transmission via asymmetric cryptographic keys.
+                    </p>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">lock</span>
+<span class="font-mono text-xs uppercase text-on-surface-variant">Cryptography / Java</span>
+</div>
+</div>
+</div>
+<!-- Project 3 -->
+<div class="project-card group relative bg-surface-container border border-outline-variant/30 overflow-hidden hover:border-primary/50 transition-colors cursor-pointer" role="button" tabindex="0"
+data-project-title="Analysis of Digital Exhibits"
+data-project-meta="Forensics, Malware Analysis — Methods: Static + Dynamic"
+data-project-metric="Evidence-led analysis"
+data-project-bullets="Performed comprehensive analysis of digital malware payloads within legal exhibits to determine intent and impact vectors.|Conducted static analysis for artifact extraction without execution and dynamic analysis for behavior observation in controlled environments.|Extracted relevant cyber evidence for investigation workflows.">
+<div class="h-64 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="A dark server room with glowing green and blue led indicators, rows of hardware racks in high contrast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh348rC9aPZXrioBS_5LyyIXBPnwOTrCWYkJdzEKFL3M2YDfQ2wFdzH0lbAlDQOV2vglNvjQDJwkhlB-3-ERas2qmLasqPBx4RCUI0SlBATEuB3dp40lMrqa2HROE-uu0z_f6CWNpjaZIuI52-AxrWgJXi8VbeUtWq9FDIR-EQ3J9U214NgYOzEE_2JoAVDPUDPemr_g0-twC1gnFCuPlFmXo6aZ8Ggoy-sYNKEF_v_LWCoFni7k3mYdT2uAsVvnSM--_swLMrHA4"/>
+</div>
+<div class="p-8">
+<span class="font-mono text-[0.6rem] text-primary mb-4 block tracking-[0.3em] uppercase">[ 0xDFIR_EXHIBIT ]</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-4">Digital Exhibits</h3>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">
+                        Comprehensive analysis of digital malware payloads within legal exhibits to determine intent and impact vectors.
+                    </p>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">policy</span>
+<span class="font-mono text-xs uppercase text-on-surface-variant">Malware Analysis</span>
+</div>
+</div>
+</div>
+<!-- Project 4 -->
+<div class="project-card group relative bg-surface-container border border-outline-variant/30 overflow-hidden hover:border-primary/50 transition-colors cursor-pointer" role="button" tabindex="0"
+data-project-title="Cross-Device Timeline Reconstruction"
+data-project-meta="Forensics, IoT, CPS — Unified sequencing"
+data-project-metric="Unified Event Sequencing"
+data-project-bullets="Correlated unified timelines from multiple devices (SSDs, SIMs, IoT) to establish event sequencing for forensic clarity.|Connected artifacts across heterogeneous sources to reduce ambiguity in investigations.|Focused on consistent timestamps, provenance, and repeatable reconstruction.">
+<div class="h-64 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="Conceptual visualization of interconnected digital timelines and data nodes in a futuristic dark blue and red environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtrUB48Sy8wKZ6wn9tO_qO1mia0zVQf9XwGXuVJI4eob0yFqPiZ6xNDIpeUa11Yu2nYkhW8j28k5nEkvQvf_lZKbfTeQkUdPNCL2wdZz_FmAaB3lpoJRo7VIbhpKCIuWoZab60xGELeiNcqKESgggFMBH9QnGxg1KfZu4b0ExN00GgSEG80Tnfvq8zQKLdiCdqXUhbR9sR0ccpaY2IXiJOVv7w9G2uiHPgsGx5fcWbb72eaOj5pK6cd6lBAfO3gKQexSDzExKwvfc"/>
+</div>
+<div class="p-8">
+<span class="font-mono text-[0.6rem] text-primary mb-4 block tracking-[0.3em] uppercase">[ 0xRECON_TIMELINE ]</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-4">Cross-Device Timeline Reconstruction</h3>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">
+                        Correlating unified timelines from multiple digital devices (SSDs, SIMs, IoT) in connected environments for forensic clarity.
+                    </p>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">timeline</span>
+<span class="font-mono text-xs uppercase text-on-surface-variant">Forensics • IoT • CPS</span>
+</div>
+<div class="font-mono text-[0.65rem] text-primary uppercase tracking-widest">Metric: Unified Event Sequencing</div>
+</div>
+</div>
+</div>
+<!-- Project 5 -->
+<div class="project-card group relative bg-surface-container border border-outline-variant/30 overflow-hidden hover:border-primary/50 transition-colors cursor-pointer" role="button" tabindex="0"
+data-project-title="Hash Vault — Integrity Checker"
+data-project-meta="Crypto, JavaScript, VirusTotal — SHA-256 verification"
+data-project-metric="SHA-256 verification"
+data-project-bullets="Built a file validation tool using SHA-256 hashing and VirusTotal API to detect tampering and malware risk signals.|Implemented integrity checks for repeatable verification workflows.|Included a live deployment link for quick demonstration.">
+<div class="h-64 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="High-tech digital vault with red security scanning beams and binary code matrix" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOxEot1b1q4c4wkZHUB_zJZJwqQX9mvIraqEA1K1qkAum5_p4b7L5ZeNvt-OHMcX4RumEUtdM368zQhUdh_DqwPJP2-XWZrn1a31-XKE64oXAa-6cpMnUq94G5O_d51jYE5CRtP4e9VDyxXzq3BBK5Pj7riwszT_37IgEghRYkFbTl7lsj2QWphb2w8UGF-Qh_6mbfKmG-lk8RIxdTdNbhybLj_LI1Fb0kKaPv8tbNPR4rn7G0wlgV7ZvW1lynuztjfEtD78nU43Y"/>
+</div>
+<div class="p-8">
+<span class="font-mono text-[0.6rem] text-primary mb-4 block tracking-[0.3em] uppercase">[ 0xHASH_VAULT ]</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-4">Hash Vault – Integrity Checker</h3>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">
+                        Powerful file validation tool using SHA-256 and VirusTotal API to detect tampering and malware. Includes live deployment.
+                    </p>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">shield</span>
+<span class="font-mono text-xs uppercase text-on-surface-variant">Crypto • JS • VirusTotal</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="font-mono text-[0.65rem] text-primary uppercase tracking-widest">Metric: SHA-256 Verification</div>
+<a class="text-white hover:text-primary transition-colors" href="https://lnkd.in/gMmNc93Z" target="_blank">
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="projects-more" class="panel-expand glass-card p-10 mt-10" aria-hidden="true">
+<div class="flex items-baseline justify-between gap-6 flex-wrap">
+<h3 class="font-headline text-3xl font-bold text-white">Projects Details</h3>
+<span class="font-mono text-primary text-sm uppercase tracking-widest">RESUME-BASED</span>
+</div>
+<div class="mt-6 space-y-6">
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">01 // PHISHING WEBSITE DETECTION</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+Developed a machine learning model to identify and classify malicious URLs with <span class="text-primary font-semibold">92% accuracy</span> using supervised learning.
+</p>
+<ul class="list-disc list-inside text-on-surface-variant text-sm leading-relaxed">
+<li>Implemented feature extraction analyzing URL structure, domain age, SSL certificates, and page content characteristics.</li>
+<li>Created a real-time detection pipeline capable of processing and classifying URLs to reduce phishing risk.</li>
+</ul>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">02 // IMAGE ENCRYPTION &amp; DETECTION USING RSA</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+Built secure image transmission using the <span class="text-primary font-semibold">RSA</span> cryptographic algorithm and applied public-key cryptography for integrity-first protection.
+</p>
+<ul class="list-disc list-inside text-on-surface-variant text-sm leading-relaxed">
+<li>Protected image data integrity and detected unauthorized access or tampering.</li>
+<li>Developed a detection mechanism to identify image modifications and ensure authenticity.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Certifications -->
+<section class="py-32 px-8 md:px-24 bg-surface-container-low border-y border-outline-variant/20" id="certs">
+<div class="max-w-7xl mx-auto">
+<h2 id="certs-box" role="button" tabindex="0" aria-controls="certs-more" aria-expanded="false" class="font-headline text-4xl font-bold mb-16 uppercase tracking-tight flex items-center gap-6 cursor-pointer select-none">
+<span class="text-primary font-mono text-xl">04/</span> Validated Expertise
+        </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="cert-card glass-card p-6 group flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer" role="button" tabindex="0"
+data-cert-title="Certified Network Security Practitioner"
+data-cert-meta="SecOps Group — May 2025"
+data-cert-bullets="Network security fundamentals with practical defensive operations focus.|Incident-ready workflows and security best practices.">
+<div class="flex items-center gap-8">
+<span class="material-symbols-outlined text-primary scale-125">verified_user</span>
+<h3 class="font-headline text-xl md:text-2xl font-bold uppercase tracking-wide">Certified Network Security Practitioner</h3>
+</div>
+<span class="font-mono text-xs text-on-surface-variant hidden md:block">SecOps Group // May 2025</span>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">north_east</span>
+</div>
+<div class="cert-card glass-card p-6 group flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer" role="button" tabindex="0"
+data-cert-title="Cybersecurity Fundamentals & AI"
+data-cert-meta="IBM SkillsBuild — May 2025"
+data-cert-bullets="Foundational cybersecurity concepts and AI-assisted security awareness.|Practical learning modules focused on real-world security thinking.">
+<div class="flex items-center gap-8">
+<span class="material-symbols-outlined text-primary scale-125">psychology</span>
+<h3 class="font-headline text-xl md:text-2xl font-bold uppercase tracking-wide">Cybersecurity Fundamentals &amp; AI</h3>
+</div>
+<span class="font-mono text-xs text-on-surface-variant hidden md:block">IBM SkillsBuild // May 2025</span>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">north_east</span>
+</div>
+<div class="cert-card glass-card p-6 group flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer" role="button" tabindex="0"
+data-cert-title="Cybersecurity Job Simulations (Forage)"
+data-cert-meta="MasterCard, AIG, Tata, ANZ — Jun 2025"
+data-cert-bullets="Identified and reported phishing threats and security vulnerabilities.|Completed threat analysis and CISA publication review.|Risk assessment, threat detection, and incident response simulations.|Incident response and policy analysis exercises.">
+<div class="flex items-center gap-8">
+<span class="material-symbols-outlined text-primary scale-125">work</span>
+<h3 class="font-headline text-xl md:text-2xl font-bold uppercase tracking-wide">Forage Job Simulations</h3>
+</div>
+<span class="font-mono text-xs text-on-surface-variant hidden md:block">MasterCard, AIG, Tata, ANZ // Jun 2025</span>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">north_east</span>
+</div>
+<div class="cert-card glass-card p-6 group flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer" role="button" tabindex="0"
+data-cert-title="Junior Cybersecurity Analyst & Ethical Hacker"
+data-cert-meta="Cisco Networking Academy — Feb 2026"
+data-cert-bullets="Ethical hacking methodology and safe penetration testing practices.|Vulnerability exploration and security analysis fundamentals.">
+<div class="flex items-center gap-8">
+<span class="material-symbols-outlined text-primary scale-125">fingerprint</span>
+<h3 class="font-headline text-xl md:text-2xl font-bold uppercase tracking-wide">Junior Ethical Hacker</h3>
+</div>
+<span class="font-mono text-xs text-on-surface-variant hidden md:block">Cisco Networking Academy // Feb 2026</span>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">north_east</span>
+</div>
+</div>
+<div id="certs-more" class="panel-expand glass-card p-10 mt-10" aria-hidden="true">
+<div class="flex items-baseline justify-between gap-6 flex-wrap">
+<h3 class="font-headline text-3xl font-bold text-white">Certification Breakdown</h3>
+<span class="font-mono text-primary text-sm uppercase tracking-widest">Resume Details</span>
+</div>
+<div class="mt-6 space-y-5">
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">CNSP // SecOps Group — May 2025</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Network security fundamentals with a focus on practical defensive operations and incident-ready workflows.</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Cybersecurity Fundamentals &amp; AI // IBM SkillsBuild — May 2025</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Built foundational understanding of cybersecurity concepts and AI-assisted threat awareness.</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Cybersecurity Job Simulations // Forage — Jun 2025</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Completed multi-scenario simulations including CISA/incident response tasks and threat detection reporting.</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Junior Ethical Hacker // Cisco Networking Academy — Feb 2026</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Learned ethical hacking methodology, vulnerability exploration, and safe penetration testing practices.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Skills & Education Grid -->
+<section class="py-32 px-8 md:px-24" id="skills">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32">
+<!-- Skills -->
+<div>
+<h2 id="skills-box" role="button" tabindex="0" aria-controls="skills-more" aria-expanded="false" class="font-headline text-4xl font-bold mb-16 uppercase cursor-pointer select-none">Core Competencies</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="skill-card bg-surface-container p-6 border border-outline-variant/30 cursor-pointer" role="button" tabindex="0"
+data-skill-title="Digital Forensics Tools"
+data-skill-meta="Tooling & acquisition / analysis"
+data-skill-bullets="Magnet Axiom, FTK Imager, EnCase, Autopsy|Oxygen Forensics, XRY, Cellebrite UFED|TD2U, Falcon Neo">
+<div class="w-10 h-10 border border-primary flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-sm">search_check</span>
+</div>
+<h4 class="font-mono text-xs font-bold text-white mb-4 uppercase tracking-widest">Digital Forensics</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">EnCase</span>
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">Autopsy</span>
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">FTK</span>
+</div>
+</div>
+<div class="skill-card bg-surface-container p-6 border border-outline-variant/30 cursor-pointer" role="button" tabindex="0"
+data-skill-title="Security Testing & Analysis"
+data-skill-meta="Offensive + defensive tooling"
+data-skill-bullets="Burp Suite, OWASP ZAP, Metasploit|SIEM, Nmap, Wireshark|Tcpdump, Scapy">
+<div class="w-10 h-10 border border-primary flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-sm">security</span>
+</div>
+<h4 class="font-mono text-xs font-bold text-white mb-4 uppercase tracking-widest">Security Testing</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">Nmap</span>
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">Burp Suite</span>
+</div>
+</div>
+<div class="skill-card bg-surface-container p-6 border border-outline-variant/30 cursor-pointer" role="button" tabindex="0"
+data-skill-title="Core Competencies"
+data-skill-meta="DFIR + security operations"
+data-skill-bullets="Cyber Forensics, Digital Evidence Analysis|Incident Response, EDR, Threat Detection|Malware Analysis, Vulnerability Assessment|Network Security, Chain of Custody">
+<div class="w-10 h-10 border border-primary flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-sm">analytics</span>
+</div>
+<h4 class="font-mono text-xs font-bold text-white mb-4 uppercase tracking-widest">Competencies</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">Incident Response</span>
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">Compliance</span>
+</div>
+</div>
+<div class="skill-card bg-surface-container p-6 border border-outline-variant/30 cursor-pointer" role="button" tabindex="0"
+data-skill-title="Programming & AI/ML"
+data-skill-meta="Build + automate security workflows"
+data-skill-bullets="Python|Machine Learning, Artificial Intelligence|Data Analysis">
+<div class="w-10 h-10 border border-primary flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-sm">code</span>
+</div>
+<h4 class="font-mono text-xs font-bold text-white mb-4 uppercase tracking-widest">Programming</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">Python</span>
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">Java</span>
+<span class="px-2 py-1 bg-surface-container-low text-[0.6rem] font-mono text-on-surface-variant border border-outline-variant/30 uppercase">SQL</span>
+</div>
+</div>
+</div>
+<div id="skills-more" class="panel-expand glass-card p-10 mt-10" aria-hidden="true">
+<div class="flex items-baseline justify-between gap-6 flex-wrap">
+<h3 class="font-headline text-3xl font-bold text-white">Technical Skills</h3>
+<span class="font-mono text-primary text-sm uppercase tracking-widest">RESUME-BASED</span>
+</div>
+<div class="mt-6 space-y-6">
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Digital Forensics Tools</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Magnet Axiom, FTK Imager, EnCase, Autopsy, Oxygen Forensics, XRY, Cellebrite UFED, TD2U, Falcon Neo</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Security Testing &amp; Analysis</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Burp Suite, OWASP ZAP, Metasploit, SIEM, Nmap, Wireshark, Tcpdump, Scapy</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Forensic &amp; Media Analysis</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Amber Five, Video/Image Enhancement</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Core Competencies</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Cyber Forensics, Digital Evidence Analysis, Incident Response, EDR, Threat Detection, Malware Analysis, Vulnerability Assessment, Network Security, Chain of Custody</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Frameworks &amp; Methodologies</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">MITRE ATT&amp;CK, OSINT, NIST, ISO 27001, OWASP Security Standards</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Programming &amp; AI/ML</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">Python, Machine Learning, Artificial Intelligence, Data Analysis</p>
+</div>
+<div>
+<p class="font-mono text-primary text-xs uppercase tracking-widest mb-2">Network Protocols</p>
+<p class="text-on-surface-variant text-sm leading-relaxed">TCP/IP, DNS, HTTP, Network Security, Traffic Analysis</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Education -->
+<div>
+<h2 class="font-headline text-4xl font-bold mb-16 uppercase">Education</h2>
+<div class="space-y-8">
+<div class="relative pl-8 border-l border-primary/30 pb-8">
+<div class="absolute left-[-5px] top-0 w-2 h-2 bg-primary"></div>
+<span class="font-mono text-xs text-primary mb-2 block uppercase tracking-widest">Postgraduate</span>
+<h4 class="font-headline text-2xl font-bold text-white mb-1 uppercase">M.Sc. Cyber Forensics &amp; Cyber Security</h4>
+<p class="text-on-surface-variant font-mono text-sm">Amity University, Noida</p>
+</div>
+<div class="relative pl-8 border-l border-primary/30 pb-8">
+<div class="absolute left-[-5px] top-0 w-2 h-2 bg-primary"></div>
+<span class="font-mono text-xs text-primary mb-2 block uppercase tracking-widest">Undergraduate</span>
+<h4 class="font-headline text-2xl font-bold text-white mb-1 uppercase">B.Sc. Cyber Forensics</h4>
+<p class="text-on-surface-variant font-mono text-sm">Mahatma Gandhi University, Kerala</p>
+</div>
+<div class="relative pl-8 border-l border-primary/30">
+<div class="absolute left-[-5px] top-0 w-2 h-2 bg-primary"></div>
+<span class="font-mono text-xs text-primary mb-2 block uppercase tracking-widest">Foundational</span>
+<h4 class="font-headline text-2xl font-bold text-white mb-1 uppercase">High School Graduation</h4>
+<p class="text-on-surface-variant font-mono text-sm">12th &amp; 10th Standard Academic Excellence</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- News Section -->
+<section class="py-32 px-8 md:px-24 bg-surface-container-low border-y border-outline-variant/20 relative" id="news">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16">
+<div>
+<span class="font-mono text-primary text-xs tracking-[0.5em] mb-4 block uppercase">THREAT INTELLIGENCE</span>
+<h2 class="font-headline text-5xl md:text-7xl font-extrabold uppercase leading-none">
+    Cyber <span class="text-primary italic">News</span>
+</h2>
+</div>
+<p id="news-status" class="font-mono text-on-surface-variant text-sm max-w-md"></p>
+</div>
+<div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <a href="https://www.cisa.gov/news-events/cybersecurity-advisories" target="_blank" rel="noreferrer" class="glass-card p-6 group border border-outline-variant/30 hover:bg-white/5 transition-all">
+    <div class="flex items-baseline justify-between gap-4">
+      <span class="font-mono text-primary text-[0.65rem] uppercase tracking-widest">CISA</span>
+      <span class="font-mono text-on-surface-variant text-[0.65rem]">Official advisories</span>
+    </div>
+    <h3 class="font-headline text-xl font-bold text-white mt-3 group-hover:text-primary transition-colors">CISA Cybersecurity Advisories</h3>
+  </a>
+  <a href="https://thehackernews.com/" target="_blank" rel="noreferrer" class="glass-card p-6 group border border-outline-variant/30 hover:bg-white/5 transition-all">
+    <div class="flex items-baseline justify-between gap-4">
+      <span class="font-mono text-primary text-[0.65rem] uppercase tracking-widest">THN</span>
+      <span class="font-mono text-on-surface-variant text-[0.65rem]">Security publication</span>
+    </div>
+    <h3 class="font-headline text-xl font-bold text-white mt-3 group-hover:text-primary transition-colors">The Hacker News</h3>
+  </a>
+  <a href="https://www.bleepingcomputer.com/news/security/" target="_blank" rel="noreferrer" class="glass-card p-6 group border border-outline-variant/30 hover:bg-white/5 transition-all">
+    <div class="flex items-baseline justify-between gap-4">
+      <span class="font-mono text-primary text-[0.65rem] uppercase tracking-widest">BleepingComputer</span>
+      <span class="font-mono text-on-surface-variant text-[0.65rem]">Security coverage</span>
+    </div>
+    <h3 class="font-headline text-xl font-bold text-white mt-3 group-hover:text-primary transition-colors">Latest Security News</h3>
+  </a>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="py-32 px-8 md:px-24 bg-surface-container-lowest relative overflow-hidden" id="contact">
+<div class="absolute inset-0 bg-transparent"></div>
+<div class="max-w-7xl mx-auto relative z-10 text-center">
+<span class="font-mono text-primary text-sm tracking-[1em] mb-8 block uppercase">Initiate Protocol</span>
+<h2 class="font-headline text-5xl md:text-[8rem] font-extrabold uppercase leading-[0.85] mb-20 tracking-tighter">
+            Get In <span class="text-primary italic">Touch</span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<a class="glass-card p-12 group flex flex-col items-center gap-6" href="mailto:kevinlh9@gmail.com">
+<i class="bi bi-envelope-fill contact-icon group-hover:-translate-y-2"></i>
+<span class="font-mono text-xs uppercase tracking-widest text-on-surface-variant">Email</span>
+<span class="font-headline font-bold text-white uppercase group-hover:text-primary transition-colors">Direct Link</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-all">arrow_forward</span>
+</a>
+<a class="glass-card p-12 group flex flex-col items-center gap-6" href="https://www.linkedin.com/in/kevin-thomas-kurian-91aa9314a" target="_blank" rel="noreferrer">
+<i class="bi bi-linkedin contact-icon group-hover:-translate-y-2"></i>
+<span class="font-mono text-xs uppercase tracking-widest text-on-surface-variant">LinkedIn</span>
+<span class="font-headline font-bold text-white uppercase group-hover:text-primary transition-colors">Professional</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-all">arrow_forward</span>
+</a>
+<a class="glass-card p-12 group flex flex-col items-center gap-6" href="https://github.com/Kevinlh44" target="_blank" rel="noreferrer">
+<i class="bi bi-github contact-icon group-hover:-translate-y-2"></i>
+<span class="font-mono text-xs uppercase tracking-widest text-on-surface-variant">GitHub</span>
+<span class="font-headline font-bold text-white uppercase group-hover:text-primary transition-colors">Repository</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-all">arrow_forward</span>
+</a>
+<a class="glass-card p-12 group flex flex-col items-center gap-6" href="https://www.instagram.com/kevin_thomas_kurian" target="_blank" rel="noreferrer">
+<i class="bi bi-instagram contact-icon group-hover:-translate-y-2"></i>
+<span class="font-mono text-xs uppercase tracking-widest text-on-surface-variant">Instagram</span>
+<span class="font-headline font-bold text-white uppercase group-hover:text-primary transition-colors">Social Feed</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-all">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#090f13] border-t border-[#1e272d] py-12 px-12 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="font-['JetBrains_Mono'] text-[0.7rem] uppercase tracking-widest text-[#e3e9ef]/50">
+        © 2025 KEVIN THOMAS KURIAN // ALL RIGHTS RESERVED
+    </div>
+<div class="flex items-center gap-8 font-['JetBrains_Mono'] text-[0.7rem] uppercase tracking-widest">
+<div class="text-primary flex items-center gap-2 before:content-['●'] before:animate-pulse before:text-primary">
+            AVAILABLE FOR OPPORTUNITIES
+        </div>
+<a class="text-[#e3e9ef]/50 hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="text-[#e3e9ef]/50 hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+</footer>
+<div id="projectModal" class="modal-overlay" aria-hidden="true">
+  <div class="modal-panel glass-card p-10">
+    <div class="flex items-start justify-between gap-6">
+      <div>
+        <p id="pmMeta" class="font-mono text-primary text-xs uppercase tracking-widest mb-2"></p>
+        <h3 id="pmTitle" class="font-headline text-3xl md:text-5xl font-extrabold uppercase leading-[0.95] text-white"></h3>
+      </div>
+      <button id="pmClose" class="modal-close" type="button">Close</button>
+    </div>
+    <div class="mt-6">
+      <div class="flex items-baseline gap-4 flex-wrap">
+        <span class="font-mono text-on-surface-variant text-sm uppercase tracking-widest">Metric</span>
+        <span id="pmMetric" class="font-mono text-primary text-sm uppercase tracking-widest"></span>
+      </div>
+      <ul id="pmBullets" class="mt-6 list-disc list-inside text-on-surface-variant text-sm leading-relaxed space-y-2"></ul>
+      <p class="mt-8 font-mono text-[0.7rem] uppercase tracking-[0.35em] text-on-surface-variant">Tip: press ESC to close</p>
+    </div>
+  </div>
+</div>
+<div id="certModal" class="modal-overlay" aria-hidden="true">
+  <div class="modal-panel glass-card p-10">
+    <div class="flex items-start justify-between gap-6">
+      <div>
+        <p id="cmMeta" class="font-mono text-primary text-xs uppercase tracking-widest mb-2"></p>
+        <h3 id="cmTitle" class="font-headline text-3xl md:text-5xl font-extrabold uppercase leading-[0.95] text-white"></h3>
+      </div>
+      <button id="cmClose" class="modal-close" type="button">Close</button>
+    </div>
+    <div class="mt-6">
+      <ul id="cmBullets" class="mt-2 list-disc list-inside text-on-surface-variant text-sm leading-relaxed space-y-2"></ul>
+      <p class="mt-8 font-mono text-[0.7rem] uppercase tracking-[0.35em] text-on-surface-variant">Tip: press ESC to close</p>
+    </div>
+  </div>
+</div>
+<div id="skillModal" class="modal-overlay" aria-hidden="true">
+  <div class="modal-panel glass-card p-10">
+    <div class="flex items-start justify-between gap-6">
+      <div>
+        <p id="smMeta" class="font-mono text-primary text-xs uppercase tracking-widest mb-2"></p>
+        <h3 id="smTitle" class="font-headline text-3xl md:text-5xl font-extrabold uppercase leading-[0.95] text-white"></h3>
+      </div>
+      <button id="smClose" class="modal-close" type="button">Close</button>
+    </div>
+    <div class="mt-6">
+      <ul id="smBullets" class="mt-2 list-disc list-inside text-on-surface-variant text-sm leading-relaxed space-y-2"></ul>
+      <p class="mt-8 font-mono text-[0.7rem] uppercase tracking-[0.35em] text-on-surface-variant">Tip: press ESC to close</p>
+    </div>
+  </div>
+</div>
+<script>
+(() => {
+  const viewLink = "https://drive.google.com/file/d/1ZB-TprZf9sUw_TzIp0Ro87ZNQOOZZ0M7/view?usp=drive_link";
+  const downloadLink = "https://drive.google.com/uc?export=download&id=1ZB-TprZf9sUw_TzIp0Ro87ZNQOOZZ0M7";
+
+  document.documentElement.style.scrollBehavior = "smooth";
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const targetId = link.getAttribute("href");
+      if (!targetId || targetId === "#") return;
+      const targetSection = document.querySelector(targetId);
+      if (!targetSection) return;
+      event.preventDefault();
+      targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  // Refresh when clicking the K logo
+  const logoLink = document.getElementById("ktk-logo");
+  if (logoLink) {
+    logoLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.location.reload();
+    });
+  }
+
+  // Expand/collapse details panels for Projects, Certs, Skills
+  const toggleItems = [
+    { boxId: "projects-box", panelId: "projects-more" },
+    { boxId: "certs-box", panelId: "certs-more" },
+    { boxId: "skills-box", panelId: "skills-more" }
+  ];
+
+  const closeAllPanels = () => {
+    toggleItems.forEach(({ boxId, panelId }) => {
+      const box = document.getElementById(boxId);
+      const panel = document.getElementById(panelId);
+      if (!box || !panel) return;
+      panel.classList.remove("open");
+      panel.setAttribute("aria-hidden", "true");
+      box.setAttribute("aria-expanded", "false");
+    });
+  };
+
+  const openPanel = (boxId, panelId) => {
+    const box = document.getElementById(boxId);
+    const panel = document.getElementById(panelId);
+    if (!box || !panel) return;
+
+    const isOpen = panel.classList.contains("open");
+    if (!isOpen) {
+      closeAllPanels();
+      panel.classList.add("open");
+      panel.setAttribute("aria-hidden", "false");
+      box.setAttribute("aria-expanded", "true");
+    } else {
+      panel.classList.remove("open");
+      panel.setAttribute("aria-hidden", "true");
+      box.setAttribute("aria-expanded", "false");
+    }
+  };
+
+  toggleItems.forEach(({ boxId, panelId }) => {
+    const box = document.getElementById(boxId);
+    if (!box) return;
+    box.addEventListener("click", (e) => {
+      e.preventDefault();
+      openPanel(boxId, panelId);
+    });
+    box.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openPanel(boxId, panelId);
+      }
+    });
+  });
+
+  document.querySelectorAll(".resume-trigger").forEach((node) => {
+    node.addEventListener("click", (event) => {
+      event.preventDefault();
+      const a = document.createElement("a");
+      a.href = downloadLink;
+      a.target = "_blank";
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => {
+        window.open(viewLink, "_blank", "noopener");
+      }, 250);
+    });
+  });
+
+  // Project popout modal (click any project card)
+  const modal = document.getElementById("projectModal");
+  const pmTitle = document.getElementById("pmTitle");
+  const pmMeta = document.getElementById("pmMeta");
+  const pmMetric = document.getElementById("pmMetric");
+  const pmBullets = document.getElementById("pmBullets");
+  const pmClose = document.getElementById("pmClose");
+
+  const closeModal = () => {
+    if (!modal) return;
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  const openModal = (card) => {
+    if (!modal) return;
+    const title = card.dataset.projectTitle || "Project";
+    const meta = card.dataset.projectMeta || "";
+    const metric = card.dataset.projectMetric || "";
+    const bullets = (card.dataset.projectBullets || "")
+      .split("|")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    pmTitle.textContent = title;
+    pmMeta.textContent = meta;
+    pmMetric.textContent = metric;
+    pmBullets.innerHTML = bullets.map((b) => `<li>${b}</li>`).join("");
+
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  document.querySelectorAll(".project-card").forEach((card) => {
+    card.addEventListener("click", () => openModal(card));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openModal(card);
+      }
+    });
+  });
+
+  if (pmClose) pmClose.addEventListener("click", closeModal);
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
+
+  // Certifications popout modal
+  const certModal = document.getElementById("certModal");
+  const cmTitle = document.getElementById("cmTitle");
+  const cmMeta = document.getElementById("cmMeta");
+  const cmBullets = document.getElementById("cmBullets");
+  const cmClose = document.getElementById("cmClose");
+
+  const closeCert = () => {
+    if (!certModal) return;
+    certModal.classList.remove("active");
+    certModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  const openCert = (card) => {
+    if (!certModal) return;
+    const title = card.dataset.certTitle || "Certification";
+    const meta = card.dataset.certMeta || "";
+    const bullets = (card.dataset.certBullets || "")
+      .split("|")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    cmTitle.textContent = title;
+    cmMeta.textContent = meta;
+    cmBullets.innerHTML = bullets.map((b) => `<li>${b}</li>`).join("");
+
+    certModal.classList.add("active");
+    certModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  document.querySelectorAll(".cert-card").forEach((card) => {
+    card.addEventListener("click", () => openCert(card));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openCert(card);
+      }
+    });
+  });
+  if (cmClose) cmClose.addEventListener("click", closeCert);
+  if (certModal) {
+    certModal.addEventListener("click", (e) => {
+      if (e.target === certModal) closeCert();
+    });
+  }
+
+  // Skills popout modal
+  const skillModal = document.getElementById("skillModal");
+  const smTitle = document.getElementById("smTitle");
+  const smMeta = document.getElementById("smMeta");
+  const smBullets = document.getElementById("smBullets");
+  const smClose = document.getElementById("smClose");
+
+  const closeSkill = () => {
+    if (!skillModal) return;
+    skillModal.classList.remove("active");
+    skillModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  const openSkill = (card) => {
+    if (!skillModal) return;
+    const title = card.dataset.skillTitle || "Skills";
+    const meta = card.dataset.skillMeta || "";
+    const bullets = (card.dataset.skillBullets || "")
+      .split("|")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    smTitle.textContent = title;
+    smMeta.textContent = meta;
+    smBullets.innerHTML = bullets.map((b) => `<li>${b}</li>`).join("");
+
+    skillModal.classList.add("active");
+    skillModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  document.querySelectorAll(".skill-card").forEach((card) => {
+    card.addEventListener("click", () => openSkill(card));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openSkill(card);
+      }
+    });
+  });
+  if (smClose) smClose.addEventListener("click", closeSkill);
+  if (skillModal) {
+    skillModal.addEventListener("click", (e) => {
+      if (e.target === skillModal) closeSkill();
+    });
+  }
+
+  // ESC closes whichever modal is open
+  window.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    closeCert();
+    closeSkill();
+  });
+
+  // Cyber News (RSS)
+  const newsGrid = document.getElementById("news-grid");
+  const newsStatus = document.getElementById("news-status");
+  const setNewsStatus = (msg) => {
+    if (!newsStatus) return;
+    newsStatus.textContent = msg || "";
+  };
+
+  const renderNews = (items) => {
+    if (!newsGrid) return;
+    newsGrid.innerHTML = "";
+    items.slice(0, 9).forEach((item) => {
+      const a = document.createElement("a");
+      a.href = item.link;
+      a.target = "_blank";
+      a.rel = "noreferrer";
+      a.className =
+        "glass-card p-6 group border border-outline-variant/30 hover:bg-white/5 transition-all";
+      a.innerHTML = `
+        <div class="flex items-baseline justify-between gap-4">
+          <span class="font-mono text-primary text-[0.65rem] uppercase tracking-widest">${item.source || "NEWS"}</span>
+          <span class="font-mono text-on-surface-variant text-[0.65rem]">${item.date || ""}</span>
+        </div>
+        <h3 class="font-headline text-xl font-bold text-white mt-3 group-hover:text-primary transition-colors">${item.title}</h3>
+      `;
+      newsGrid.appendChild(a);
+    });
+  };
+
+  const loadNews = async () => {
+    if (!newsGrid) return;
+    const fallbackItems = [
+      { title: "CISA Alerts", link: "https://www.cisa.gov/news-events/cybersecurity-advisories", source: "CISA", date: "Official advisories" },
+      { title: "The Hacker News", link: "https://thehackernews.com/", source: "THN", date: "Security publication" },
+      { title: "BleepingComputer Security", link: "https://www.bleepingcomputer.com/news/security/", source: "BleepingComputer", date: "Security coverage" },
+      { title: "Krebs on Security", link: "https://krebsonsecurity.com/", source: "Krebs", date: "Investigative reporting" },
+      { title: "Dark Reading", link: "https://www.darkreading.com/", source: "Dark Reading", date: "Industry updates" },
+      { title: "NIST News", link: "https://www.nist.gov/news-events/news", source: "NIST", date: "Standards & guidance" }
+    ];
+
+    const feeds = [
+      "https://news.google.com/rss/search?q=cybersecurity%20threat%20intelligence&hl=en-US&gl=US&ceid=US:en",
+      "https://www.bleepingcomputer.com/feed/",
+      "https://thehackernews.com/feeds/posts/default"
+    ];
+
+    const proxyBuilders = [
+      (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+      (u) => `https://r.jina.ai/http://${u.replace(/^https?:\/\//, "")}`
+    ];
+
+    try {
+      setNewsStatus("Loading latest cyber intel...");
+      let items = [];
+      for (const feed of feeds) {
+        if (items.length >= 9) break;
+        for (const buildProxy of proxyBuilders) {
+          try {
+            const proxied = buildProxy(feed);
+            const res = await fetch(proxied);
+            if (!res.ok) continue;
+            const xmlText = await res.text();
+            const doc = new DOMParser().parseFromString(xmlText, "text/xml");
+            const nodes = Array.from(doc.querySelectorAll("item")).slice(0, 12);
+            const parsed = nodes.map((n) => {
+              const title = (n.querySelector("title")?.textContent || "").replace(/\s+/g, " ").trim();
+              const link = (n.querySelector("link")?.textContent || "").trim();
+              const pub = (n.querySelector("pubDate")?.textContent || "").trim();
+              const date = pub ? pub.replace("GMT", "").slice(0, 16) : "";
+              const source = (n.querySelector("source")?.textContent || "").trim();
+              return { title, link, date, source };
+            }).filter((x) => x.title && x.link);
+
+            if (parsed.length > 0) {
+              items = items.concat(parsed);
+              break;
+            }
+          } catch (_err) {
+            // Try next proxy/feed
+          }
+        }
+      }
+
+      // de-dup by link and keep first 9
+      const seen = new Set();
+      items = items.filter((x) => {
+        if (seen.has(x.link)) return false;
+        seen.add(x.link);
+        return true;
+      });
+
+      if (items.length === 0) {
+        renderNews(fallbackItems);
+        setNewsStatus("Live feed unavailable, showing trusted sources.");
+        return;
+      }
+
+      renderNews(items);
+      setNewsStatus("Updated just now.");
+    } catch (err) {
+      renderNews(fallbackItems);
+      setNewsStatus("Could not load live feed. Showing trusted sources.");
+    }
+  };
+
+  loadNews();
+  // Refresh periodically (best-effort)
+  setInterval(loadNews, 10 * 60 * 1000);
+
+  const canvas = document.getElementById("heroNetwork");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const pointer = { x: -9999, y: -9999, active: false };
+  let particles = [];
+  let width = 0;
+  let height = 0;
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    width = rect.width;
+    height = rect.height;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = window.innerWidth < 768 ? 55 : 110;
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35
+    }));
+  }
+
+  function step() {
+    // Fade previous frame for smooth "tangled" motion trails
+    ctx.fillStyle = "rgba(9, 15, 19, 0.10)";
+    ctx.fillRect(0, 0, width, height);
+
+    const t = performance.now() * 0.001;
+    for (const p of particles) {
+      // Flow field creates a tangled network feel
+      const nx = p.x / Math.max(1, width);
+      const ny = p.y / Math.max(1, height);
+      const ang =
+        Math.sin((nx * 6.0 + t * 0.35) * Math.PI) +
+        Math.cos((ny * 5.0 - t * 0.28) * Math.PI);
+      p.vx += Math.cos(ang) * 0.002;
+      p.vy += Math.sin(ang) * 0.002;
+
+      // Light damping keeps it stable
+      p.vx *= 0.985;
+      p.vy *= 0.985;
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Wrap to keep density steady across resizes
+      if (p.x < -10) p.x = width + 10;
+      if (p.x > width + 10) p.x = -10;
+      if (p.y < -10) p.y = height + 10;
+      if (p.y > height + 10) p.y = -10;
+      if (pointer.active) {
+        const dx = pointer.x - p.x;
+        const dy = pointer.y - p.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 220 && dist > 0.01) {
+          // Attraction pulls particles inward near the cursor
+          const pull = (1 - dist / 220) * 0.006;
+          p.vx += (dx / dist) * pull;
+          p.vy += (dy / dist) * pull;
+        }
+      }
+    }
+
+    ctx.globalCompositeOperation = "lighter";
+    for (let i = 0; i < particles.length; i++) {
+      const a = particles[i];
+      // Subtle size/brightness variation for "signal" feel
+      const speed = Math.hypot(a.vx, a.vy);
+      const alpha = Math.min(0.95, 0.45 + speed * 40);
+      ctx.fillStyle = `rgba(255,184,0,${alpha})`;
+      ctx.fillRect(a.x - 1, a.y - 1, 2, 2);
+      for (let j = i + 1; j < particles.length; j++) {
+        const b = particles[j];
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        const threshold = 120 + (pointer.active ? 35 : 0);
+        if (d < threshold) {
+          ctx.strokeStyle = `rgba(255,184,0,${(1 - d / threshold) * 0.20})`;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalCompositeOperation = "source-over";
+    requestAnimationFrame(step);
+  }
+
+  canvas.addEventListener("mousemove", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    pointer.x = e.clientX - rect.left;
+    pointer.y = e.clientY - rect.top;
+    pointer.active = true;
+  });
+  canvas.addEventListener("mouseleave", () => {
+    pointer.active = false;
+  });
+  window.addEventListener("resize", resize);
+  resize();
+  step();
+})();
+</script>
+</body></html>
